@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"user"})
 public class Comment extends BaseEntity {
 
     @ManyToOne

@@ -1,5 +1,6 @@
 package by.myself.task_tracker.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @ToString(callSuper = true)
 public class User extends BaseEntity {

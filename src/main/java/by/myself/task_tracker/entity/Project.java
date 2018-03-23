@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"developers"})
 public class Project extends BaseEntity {
 
     @ManyToOne
@@ -36,6 +37,6 @@ public class Project extends BaseEntity {
     private String title;
 
     @Column(name = "status", nullable = false)
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Status status;
 }

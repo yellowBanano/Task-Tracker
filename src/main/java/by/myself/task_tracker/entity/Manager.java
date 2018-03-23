@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
+//@AllArgsConstructor
 @ToString(callSuper = true)
 @PrimaryKeyJoinColumn(name = "id_user")
 public class Manager extends User {

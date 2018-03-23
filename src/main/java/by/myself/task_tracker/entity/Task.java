@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,13 +31,14 @@ public class Task extends BaseEntity {
     private Project project;
 
     @OneToOne
-    @JoinColumn(name = "id_user")
-    private User user;
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "id_developer")
+    private Developer developer;
 
     @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "status", nullable = false)
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Status status;
 }
