@@ -129,4 +129,4 @@ VALUES (3, 7, 'How To Make Your Text Look Amazing In 5 Days', '2018-03-23 19:50:
 INSERT INTO comments (id_task, id_user, text, post_time)
 VALUES (3, 8, 'Succeed With Text In 24 Hours', '2018-03-23 19:50:58');
 INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (4, 8, 'Here Is What You Should Do For Your Text', '2018-03-23 19:50:58');
+# VALUES (4, 8, 'Here Is What You Should Do For Your Text/', '2018-03-23 19:50:58');
