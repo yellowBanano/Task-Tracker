@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Developer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/static/developer.css">
+    <script src="/static/util/developer.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>My projects</h2>
+
+    <!--Header of collapse table-->
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+
+                    <!--Title of collapse table-->
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Collapsible Group 1</a>
+                    <label class="pull-right"><input type="checkbox" value="">only my tasks</label>
+                </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+
+                <!--Body of collapse table-->
+                <div class="panel-body">
+                    <table class="table table-hover" id="task-table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Task</th>
+                            <th>Assignee</th>
+                            <th>Status</th>
+                            <th>Edit</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Site Wireframes</td>
+                            <td>John Smith</td>
+                            <td>in progress</td>
+                            <td>
+                                <p data-placement="top" data-toggle="tooltip" title="Edit">
+                                    <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal"
+                                            data-target="#edit"><span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Mobile Landing Page</td>
+                            <td>Kilgore Trout</td>
+                            <td>completed</td>
+                            <td>
+                                <p data-placement="top" data-toggle="tooltip" title="Edit">
+                                    <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal"
+                                            data-target="#edit"><span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>+</td>
+                            <td><input placeholder="Description"></td>
+                            <td>
+                                <select name="assignee" id="assignee">
+                                    <option value="Bred">Bred</option>
+                                    <option value="Bob">Bob</option>
+                                    <option value="Bryan">Bryan</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="status" id="status">
+                                    <option value="WAITING">WAITING</option>
+                                    <option value="IMPLEMENTATION">IMPLEMENTATION</option>
+                                    <option value="VERIFYING">VERIFYING</option>
+                                    <option value="RELEASING">RELEASING</option>
+                                </select>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal Edit-->
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span
+                            class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    <h4 class="modal-title custom_align" id="Heading">Change Status</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select name="status" id="status">
+                            <option value="WAITING">WAITING</option>
+                            <option value="IMPLEMENTATION">IMPLEMENTATION</option>
+                            <option value="VERIFYING">VERIFYING</option>
+                            <option value="RELEASING">RELEASING</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="button" class="btn btn-warning btn-lg" style="width: 100%;">
+                        <span class="glyphicon glyphicon-ok-sign"></span> Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Developers search-->
+    <div class="row">
+        <div class="panel panel-primary filterable">
+            <div class="panel-heading">
+                <h3 class="panel-title">Developers</h3>
+            </div>
+            <table class="table">
+                <thead>
+                <tr class="filters">
+                    <th><input type="text" class="form-control" placeholder="#"></th>
+                    <th><input type="text" class="form-control" placeholder="E-mail"></th>
+                    <th><input type="text" class="form-control" placeholder="First Name"></th>
+                    <th><input type="text" class="form-control" placeholder="Last Name"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!--Script for Searching-->
+    <script>
+        $(document).ready(function () {
+            $('.filterable .btn-filter').click(function () {
+                let $panel = $(this).parents('.filterable'),
+                    $filters = $panel.find('.filters input'),
+                    $tbody = $panel.find('.table tbody');
+                if ($filters.prop('disabled') === true) {
+                    $filters.prop('disabled', false);
+                    $filters.first().focus();
+                } else {
+                    $filters.val('').prop('disabled', true);
+                    $tbody.find('.no-result').remove();
+                    $tbody.find('tr').show();
+                }
+            });
+
+            $('.filterable .filters input').keyup(function (e) {
+                /* Ignore tab key */
+                let code = e.keyCode || e.which;
+                if (code == '9') return;
+                /* Useful DOM data and selectors */
+                let $input = $(this),
+                    inputContent = $input.val().toLowerCase(),
+                    $panel = $input.parents('.filterable'),
+                    column = $panel.find('.filters th').index($input.parents('th')),
+                    $table = $panel.find('.table'),
+                    $rows = $table.find('tbody tr');
+                /* Dirtiest filter function ever ;) */
+                let $filteredRows = $rows.filter(function () {
+                    let value = $(this).find('td').eq(column).text().toLowerCase();
+                    return value.indexOf(inputContent) === -1;
+                });
+                /* Clean previous no-result if exist */
+                $table.find('tbody .no-result').remove();
+                /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+                $rows.show();
+                $filteredRows.hide();
+                /* Prepend no-result row if all rows are filtered */
+                if ($filteredRows.length === $rows.length) {
+                    $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
+                }
+            });
+        });
+    </script>
+
+    <!--Add task-->
+    <script>
+        $(document).ready(function () {
+            $("#add_row").on("click", function () {
+                // Dynamic Rows Code
+
+                // Get max row id and set new id
+                let newid = 0;
+                $.each($("#tab_logic tr"), function () {
+                    if (parseInt($(this).data("id")) > newid) {
+                        newid = parseInt($(this).data("id"));
+                    }
+                });
+                newid++;
+
+                let tr = $("<tr></tr>", {
+                    id: "addr" + newid,
+                    "data-id": newid
+                });
+
+                // loop through each td and create new elements with name of newid
+                $.each($("#tab_logic tbody tr:nth(0) td"), function () {
+                    let cur_td = $(this);
+
+                    let children = cur_td.children();
+
+                    // add new td and element if it has a nane
+                    if ($(this).data("name") !== undefined) {
+                        let td = $("<td></td>", {
+                            "data-name": $(cur_td).data("name")
+                        });
+
+                        let c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
+                        c.attr("name", $(cur_td).data("name") + newid);
+                        c.appendTo($(td));
+                        td.appendTo($(tr));
+                    } else {
+                        let td = $("<td></td>", {
+                            'text': $('#tab_logic tr').length
+                        }).appendTo($(tr));
+                    }
+                });
+                $(tr).appendTo($('#tab_logic'));
+
+                $(tr).find("td button.row-remove").on("click", function () {
+                    $(this).closest("tr").remove();
+                });
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>

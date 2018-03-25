@@ -13,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +33,9 @@ public class Project extends BaseEntity {
 
     @ManyToMany(mappedBy = "projects")
     private Set<Developer> developers = new HashSet<>();
+
+    @OneToMany(mappedBy = "project")
+    private Set<Task> tasks = new HashSet<>();
 
     @Column(name = "title", nullable = false, unique = true)
     private String title;

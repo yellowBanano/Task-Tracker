@@ -7,6 +7,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 /**
  * @author Nazar Kuksov
  */
-@RepositoryRestResource(collectionResourceRel = "developers", path = "")
+@RepositoryRestResource(collectionResourceRel = "developers")
 public interface DeveloperRepository extends PagingAndSortingRepository<Developer, Long> {
+
+    Developer findFirstById(Long id);
 }

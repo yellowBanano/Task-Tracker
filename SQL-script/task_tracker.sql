@@ -4,8 +4,10 @@ USE task_tracker;
 
 CREATE TABLE users (
   id         BIGINT AUTO_INCREMENT,
-  first_name VARCHAR(50) NOT NULL,
-  last_name  VARCHAR(50) NOT NULL,
+  email      VARCHAR(50)  NOT NULL UNIQUE,
+  password   VARCHAR(100) NOT NULL,
+  first_name VARCHAR(50)  NOT NULL,
+  last_name  VARCHAR(50)  NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -63,16 +65,16 @@ CREATE TABLE comments (
 );
 
 
-INSERT INTO users (first_name, last_name) VALUES ('Marianne', 'Hanson');
-INSERT INTO users (first_name, last_name) VALUES ('Jeffrey', 'Stevens');
-INSERT INTO users (first_name, last_name) VALUES ('Adam', 'Perkins');
-INSERT INTO users (first_name, last_name) VALUES ('Julio', 'Chapman');
-INSERT INTO users (first_name, last_name) VALUES ('Evelyn', 'Griffith');
-INSERT INTO users (first_name, last_name) VALUES ('Hope', 'Adams');
-INSERT INTO users (first_name, last_name) VALUES ('Cecelia', 'Hill');
-INSERT INTO users (first_name, last_name) VALUES ('Santos', 'Neal');
-INSERT INTO users (first_name, last_name) VALUES ('Maggie', 'Estrada');
-INSERT INTO users (first_name, last_name) VALUES ('Nancy', 'Armstrong');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email1@hot.co', 'password', 'Marianne', 'Hanson');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email2@hot.co', 'password', 'Adam', 'Perkins');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email3@hot.co', 'password', 'Jeffrey', 'Stevens');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email4@hot.co', 'password', 'Julio', 'Chapman');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email5@hot.co', 'password', 'Evelyn', 'Griffith');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email6@hot.co', 'password', 'Hope', 'Adams');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email7@hot.co', 'password', 'Cecelia', 'Hill');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email8@hot.co', 'password', 'Santos', 'Neal');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email9@hot.co', 'password', 'Maggie', 'Estrada');
+INSERT INTO users (email, password, first_name, last_name) VALUES ('email10@hot.co', 'password', 'Nancy', 'Armstrong');
 
 INSERT INTO developers (id_user) VALUES (1);
 INSERT INTO developers (id_user) VALUES (2);
@@ -89,19 +91,17 @@ INSERT INTO managers (id_user) VALUES (10);
 INSERT INTO projects (id_manager, title, status) VALUES (1, 'Here Is A Quick Cure For Table', 'WAITING');
 INSERT INTO projects (id_manager, title, status) VALUES (1, 'Master (Your) Table in 5 Minutes A Day', 'WAITING');
 INSERT INTO projects (id_manager, title, status) VALUES (1, '11 Methods Of Table Domination', 'WAITING');
-INSERT INTO projects (id_manager, title, status)
-VALUES (2, 'Now You Can Buy An App That is Really Made For Table', 'WAITING');
+INSERT INTO projects (id_manager, title, status)VALUES (2, 'Now You Can Buy An App That is Really Made For Table', 'WAITING');
 INSERT INTO projects (id_manager, title, status) VALUES (2, 'Rules Not To Follow About Table', 'WAITING');
-INSERT INTO projects (id_manager, title, status)
-VALUES (3, 'Use Table To Make Someone Fall In Love With You', 'WAITING');
+INSERT INTO projects (id_manager, title, status)VALUES (3, 'Use Table To Make Someone Fall In Love With You', 'WAITING');
 INSERT INTO projects (id_manager, title, status) VALUES (4, 'Table Iphone Apps', 'WAITING');
 
-INSERT INTO project_developer (id_project, id_developer) VALUES (4, 1);
-INSERT INTO project_developer (id_project, id_developer) VALUES (5, 2);
-INSERT INTO project_developer (id_project, id_developer) VALUES (6, 3);
-INSERT INTO project_developer (id_project, id_developer) VALUES (7, 4);
-INSERT INTO project_developer (id_project, id_developer) VALUES (8, 5);
-INSERT INTO project_developer (id_project, id_developer) VALUES (9, 6);
+INSERT INTO project_developer (id_project, id_developer) VALUES (1, 1);
+INSERT INTO project_developer (id_project, id_developer) VALUES (2, 2);
+INSERT INTO project_developer (id_project, id_developer) VALUES (3, 3);
+INSERT INTO project_developer (id_project, id_developer) VALUES (4, 4);
+INSERT INTO project_developer (id_project, id_developer) VALUES (5, 5);
+INSERT INTO project_developer (id_project, id_developer) VALUES (6, 6);
 
 INSERT INTO tasks (id_project, id_developer, description, status)
 VALUES (1, 1, 'What You Can Learn From Bill Gates About Description', 'WAITING');
