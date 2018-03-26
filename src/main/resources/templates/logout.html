@@ -5,6 +5,18 @@
   <title>Logout</title>
 </head>
 <body>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Simple Task Tracker</a>
+    </div>
+    <ul class="nav navbar-nav pull-right">
+      <li><a>Hello my dear, ${user.name}</a></li>
+    </ul>
+  </div>
+</nav>
+
 <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
 <form th:action="@{/logout}" method="post">
   <input type="submit" value="Sign Out"/>

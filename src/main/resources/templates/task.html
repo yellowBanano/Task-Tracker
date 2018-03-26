@@ -1,10 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Task</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/static/task.css">
+
 </head>
 <body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Simple Task Tracker</a>
+        </div>
+        <ul class="nav navbar-nav pull-right">
+            <li><a>Hello my dear, ${user.name}</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="text-center">
+        <h1>Project</h1>
+        <h3>Task</h3>
+    </div>
+    <i>
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum
+        sociis
+        natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec,
+        pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
+        nec,
+        vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu
+        pede
+        mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend
+        tellus.
+        Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra
+        quis,
+        feugiat a,
+    </i>
+
+    <h3>Comments</h3>
+
+
+    <div class="message-wrap">
+        <div class="msg-wrap">
+
+
+            <div class="media msg ">
+                <a class="pull-left" href="#">
+                    <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 32px; height: 32px;"
+                         src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png">
+                </a>
+                <div class="media-body">
+                    <i class="pull-right fa fa-trash-o lead"></i>
+                    <i class="pull-right fa fa-pencil lead"></i>
+                    <small class="pull-right time">
+                        <i class="fa fa-clock-o"></i>
+                        12:10am
+                    </small>
+                    <h5 class="media-heading">Naimish Sakhpara</h5>
+                    <small class="col-lg-10">
+                        Location H-2, Ayojan Nagar, Near Gate-3, Near
+                        Shreyas Crossing Dharnidhar Derasar,
+                        Paldi, Ahmedabad 380007, Ahmedabad,
+                        India
+                        Phone 091 37 669307
+                        Email aapamdavad.district@gmail.com
+                    </small>
+                </div>
+            </div>
+            <div class="media msg">
+                <a class="pull-left" href="#">
+                    <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 32px; height: 32px;"
+                         src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png">
+                </a>
+                <div class="media-body">
+                    <i class="pull-right fa fa-trash-o lead"></i>
+                    <i class="pull-right fa fa-pencil lead"></i>
+                    <small class="pull-right time"><i class="fa fa-clock-o"></i> 12:10am</small>
+
+                    <h5 class="media-heading">Naimish Sakhpara</h5>
+                    <small class="col-lg-10">Arnab Goswami: "Some people close to Congress Party and close to the
+                        government had a #secret #meeting in a farmhouse in Maharashtra in which Anna Hazare send some
+                        representatives and they had a meeting in the discussed how to go about this all fast and how
+                        eventually this will end."
+                    </small>
+                </div>
+            </div>
+            <div class="media msg">
+                <a class="pull-left" href="#">
+                    <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 32px; height: 32px;"
+                         src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png">
+                </a>
+                <div class="media-body">
+                    <i class="pull-right fa fa-trash-o lead"></i>
+                    <i class="pull-right fa fa-pencil lead"></i>
+                    <small class="pull-right time"><i class="fa fa-clock-o"></i> 12:10am</small>
+
+                    <h5 class="media-heading">Naimish Sakhpara</h5>
+                    <small class="col-lg-10">Arnab Goswami: "Some people close to Congress Party and close to the
+                        government had a #secret #meeting in a farmhouse in Maharashtra in which Anna Hazare send some
+                        representatives and they had a meeting in the discussed how to go about this all fast and how
+                        eventually this will end."
+                    </small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="send-wrap ">
+            <textarea class="form-control send-message" rows="3" style="resize: none" placeholder="Write a reply..."></textarea>
+        </div>
+
+        <div class="btn-panel">
+            <a href="" class=" col-lg-4 text-right btn   send-message-btn pull-right" role="button">
+                <i class="fa fa-plus"></i> Send Message
+            </a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

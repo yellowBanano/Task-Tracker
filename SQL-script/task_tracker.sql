@@ -1,4 +1,4 @@
-CREATE DATABASE task_tracker;
+CREATE DATABASE task_trackers;
 USE task_tracker;
 # DROP DATABASE task_tracker;
 

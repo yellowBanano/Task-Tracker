@@ -8,10 +8,21 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="/static/developer.css">
+    <link rel="stylesheet" type="text/css" href="/static/developer.css">
     <script src="/static/util/developer.js"></script>
 </head>
 <body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Simple Task Tracker</a>
+        </div>
+        <ul class="nav navbar-nav pull-right">
+            <li><a>Hello my dear, ${user.name}</a></li>
+        </ul>
+    </div>
+</nav>
 
 <div class="container">
     <h2>My projects</h2>
@@ -122,47 +133,6 @@
         </div>
     </div>
 
-
-    <!--Developers search-->
-    <div class="row">
-        <div class="panel panel-primary filterable">
-            <div class="panel-heading">
-                <h3 class="panel-title">Developers</h3>
-            </div>
-            <table class="table">
-                <thead>
-                <tr class="filters">
-                    <th><input type="text" class="form-control" placeholder="#"></th>
-                    <th><input type="text" class="form-control" placeholder="E-mail"></th>
-                    <th><input type="text" class="form-control" placeholder="First Name"></th>
-                    <th><input type="text" class="form-control" placeholder="Last Name"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
     <!--Script for Searching-->
     <script>
         $(document).ready(function () {
@@ -205,57 +175,6 @@
                 if ($filteredRows.length === $rows.length) {
                     $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
                 }
-            });
-        });
-    </script>
-
-    <!--Add task-->
-    <script>
-        $(document).ready(function () {
-            $("#add_row").on("click", function () {
-                // Dynamic Rows Code
-
-                // Get max row id and set new id
-                let newid = 0;
-                $.each($("#tab_logic tr"), function () {
-                    if (parseInt($(this).data("id")) > newid) {
-                        newid = parseInt($(this).data("id"));
-                    }
-                });
-                newid++;
-
-                let tr = $("<tr></tr>", {
-                    id: "addr" + newid,
-                    "data-id": newid
-                });
-
-                // loop through each td and create new elements with name of newid
-                $.each($("#tab_logic tbody tr:nth(0) td"), function () {
-                    let cur_td = $(this);
-
-                    let children = cur_td.children();
-
-                    // add new td and element if it has a nane
-                    if ($(this).data("name") !== undefined) {
-                        let td = $("<td></td>", {
-                            "data-name": $(cur_td).data("name")
-                        });
-
-                        let c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
-                        c.attr("name", $(cur_td).data("name") + newid);
-                        c.appendTo($(td));
-                        td.appendTo($(tr));
-                    } else {
-                        let td = $("<td></td>", {
-                            'text': $('#tab_logic tr').length
-                        }).appendTo($(tr));
-                    }
-                });
-                $(tr).appendTo($('#tab_logic'));
-
-                $(tr).find("td button.row-remove").on("click", function () {
-                    $(this).closest("tr").remove();
-                });
             });
         });
     </script>

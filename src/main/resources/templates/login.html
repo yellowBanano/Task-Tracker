@@ -1,20 +1,71 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+>
 <head>
-  <title>Login</title>
+    <title>Login</title>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+
+        .centered-form {
+            margin-top: 10%;
+        }
+
+        .centered-form .panel {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+        }
+    </style>
 </head>
 <body>
-<div th:if="${param.error}">
-  Invalid username and password.
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Simple Task Tracker</a>
+        </div>
+        <ul class="nav navbar-nav pull-right">
+            <li><a>Hello my dear, ${user.name}</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title text-center">Login</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div th:if="${param.error}" style="color: red">
+                        Invalid username and password.
+                    </div>
+                    <div th:if="${param.logout}">
+                        <strong>You have been logged out.</strong>
+                    </div>
+
+                    <form th:action="@{/login}" method="post">
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password">
+                        </div>
+                        <input type="submit" value="Login" class="btn btn-success btn-block">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div th:if="${param.logout}">
-  You have been logged out.
-</div>
-<form th:action="@{/login}" method="post">
-  <div><label> User Name : <input type="text" name="username"/> </label></div>
-  <div><label> Password: <input type="password" name="password"/> </label></div>
-  <div><input type="submit" value="Sign In"/></div>
-</form>
+
 </body>
 </html>
