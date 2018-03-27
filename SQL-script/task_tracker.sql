@@ -1,4 +1,4 @@
-CREATE DATABASE task_trackers;
+CREATE DATABASE task_tracker;
 USE task_tracker;
 # DROP DATABASE task_tracker;
 
@@ -12,16 +12,14 @@ CREATE TABLE users (
 );
 
 CREATE TABLE developers (
-  id      BIGINT AUTO_INCREMENT,
   id_user BIGINT NOT NULL UNIQUE,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id_user),
   FOREIGN KEY (id_user) REFERENCES users (id)
 );
 
 CREATE TABLE managers (
-  id      BIGINT AUTO_INCREMENT,
   id_user BIGINT NOT NULL UNIQUE,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id_user),
   FOREIGN KEY (id_user) REFERENCES users (id)
 );
 
@@ -31,7 +29,7 @@ CREATE TABLE projects (
   title      VARCHAR(100) NOT NULL UNIQUE,
   status     VARCHAR(30)  NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (id_manager) REFERENCES managers (id)
+  FOREIGN KEY (id_manager) REFERENCES managers (id_user)
 );
 
 CREATE TABLE project_developer (
@@ -39,7 +37,7 @@ CREATE TABLE project_developer (
   id_developer BIGINT NOT NULL,
   PRIMARY KEY (id_project, id_developer),
   FOREIGN KEY (id_project) REFERENCES projects (id),
-  FOREIGN KEY (id_developer) REFERENCES developers (id)
+  FOREIGN KEY (id_developer) REFERENCES developers (id_user)
 );
 
 CREATE TABLE tasks (
@@ -50,7 +48,7 @@ CREATE TABLE tasks (
   status       VARCHAR(30)  NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (id_project) REFERENCES projects (id),
-  FOREIGN KEY (id_developer) REFERENCES developers (id)
+  FOREIGN KEY (id_developer) REFERENCES developers (id_user)
 );
 
 CREATE TABLE comments (
@@ -88,13 +86,13 @@ INSERT INTO managers (id_user) VALUES (8);
 INSERT INTO managers (id_user) VALUES (9);
 INSERT INTO managers (id_user) VALUES (10);
 
-INSERT INTO projects (id_manager, title, status) VALUES (1, 'Here Is A Quick Cure For Table', 'WAITING');
-INSERT INTO projects (id_manager, title, status) VALUES (1, 'Master (Your) Table in 5 Minutes A Day', 'WAITING');
-INSERT INTO projects (id_manager, title, status) VALUES (1, '11 Methods Of Table Domination', 'WAITING');
-INSERT INTO projects (id_manager, title, status)VALUES (2, 'Now You Can Buy An App That is Really Made For Table', 'WAITING');
-INSERT INTO projects (id_manager, title, status) VALUES (2, 'Rules Not To Follow About Table', 'WAITING');
-INSERT INTO projects (id_manager, title, status)VALUES (3, 'Use Table To Make Someone Fall In Love With You', 'WAITING');
-INSERT INTO projects (id_manager, title, status) VALUES (4, 'Table Iphone Apps', 'WAITING');
+INSERT INTO projects (id_manager, title, status) VALUES (7, 'Here Is A Quick Cure For Table', 'WAITING');
+INSERT INTO projects (id_manager, title, status) VALUES (7, 'Master (Your) Table in 5 Minutes A Day', 'WAITING');
+INSERT INTO projects (id_manager, title, status) VALUES (7, '11 Methods Of Table Domination', 'WAITING');
+INSERT INTO projects (id_manager, title, status)VALUES (8, 'Now You Can Buy An App That is Really Made For Table', 'WAITING');
+INSERT INTO projects (id_manager, title, status) VALUES (8, 'Rules Not To Follow About Table', 'WAITING');
+INSERT INTO projects (id_manager, title, status)VALUES (9, 'Use Table To Make Someone Fall In Love With You', 'WAITING');
+INSERT INTO projects (id_manager, title, status) VALUES (10, 'Table Iphone Apps', 'WAITING');
 
 INSERT INTO project_developer (id_project, id_developer) VALUES (1, 1);
 INSERT INTO project_developer (id_project, id_developer) VALUES (2, 2);

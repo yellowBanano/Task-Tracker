@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 /**
  * @author Nazar Kuksov
  */
-@RepositoryRestResource(collectionResourceRel = "managers")
+@RepositoryRestResource(collectionResourceRel = "managers", path = "managers")
 public interface ManagerRepository extends PagingAndSortingRepository<Manager, Long> {
 
     Manager findFirstById(Long id);
