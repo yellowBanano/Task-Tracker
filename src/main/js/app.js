@@ -17,9 +17,11 @@ import {
   NavbarBrand,
   NavbarToggler,
   NavItem,
-  NavLink
+  NavLink, Table
 } from "reactstrap";
 import FaPencil from 'react-icons/lib/fa/pencil'
+import FaPlus from 'react-icons/lib/fa/plus'
+import TaskDetails from "./modules/TaskDetails";
 
 const FilterableTable = require('react-filterable-table');
 const React = require('react');
@@ -27,7 +29,6 @@ const ReactDOM = require('react-dom');
 const client = require('./client');
 
 const root = '/api';
-
 
 
 class Profile extends React.Component {
@@ -45,11 +46,11 @@ class Profile extends React.Component {
 
   render() {
     return (
-      <Container>
+      <div>
         <ProjectList projects={this.state.projects}/>
         <DeveloperFilterList/>
-      </Container>
-    );
+      </div>
+    )
   }
 };
 
@@ -67,10 +68,14 @@ class ProjectList extends React.Component {
       <div>
         <h2>My projects</h2>
         <ButtonGroup block="true" vertical>
-          <Button color="primary" size="lg" block="true" onClick={this.toggle}>
-            <h4 className="panel-title">+ New Project</h4>
-          </Button>
-          {projects}
+          <Table>
+            <tbody>
+            {projects}
+            <Button color="primary" size="lg" block="true" onClick={this.toggle}>
+              <h4 className="panel-title">+ New Project</h4>
+            </Button>
+            </tbody>
+          </Table>
         </ButtonGroup>
       </div>
     )
@@ -91,7 +96,7 @@ class Project extends React.Component {
 
   render() {
     return (
-      <div>
+      <tr>
         <Button color="success" size="lg" block="true" onClick={this.toggle}>
           <h4 className="panel-title">{this.props.project.title}</h4>
         </Button>
@@ -102,7 +107,7 @@ class Project extends React.Component {
             </CardBody>
           </Card>
         </Collapse>
-      </div>
+      </tr>
     )
   }
 }
@@ -162,7 +167,7 @@ class TaskList extends React.Component {
           </thead>
           <tbody>
           {tasks}
-          {/*<AddTask />*/}
+          <AddTask/>
           </tbody>
         </table>
       </div>
@@ -183,14 +188,31 @@ class Task extends React.Component {
   }
 
   render() {
+    let indexTask = this.props.task._links.self.href.slice(32);
     return (
-      <tr>
-        <td>{this.props.task.description}</td>
+      <tr key={indexTask}>
+        <td><Link to={`/tasks/${indexTask}`}>{this.props.task.description}</Link></td>
         <td>{this.state.developerFullName}</td>
         <td>{this.props.task.status}</td>
         <td>
           <Button color="warning"><FaPencil/></Button>
         </td>
+      </tr>
+    )
+  }
+}
+
+class AddTask extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <tr>
+        <td><input type="text" placeholder="Write new task..." disabled/></td>
+        <td colSpan="3"><Button color="primary"><FaPlus/>Add Task</Button></td>
       </tr>
     )
   }
@@ -243,46 +265,12 @@ class DeveloperFilterList extends React.Component {
   }
 }
 
-// class AddTask extends React.Component {
-//   render() {
-//     return (
-//       <tr>
-//         <td>+</td>
-//         <td><input placeholder="Description"/></td>
-//         <td>
-//           <select name="assignee" id="assignee">
-//             <option value="Bred">Bred</option>
-//             <option value="Bob">Bob</option>
-//             <option value="Bryan">Bryan</option>
-//           </select>
-//         </td>
-//         <td>
-//           <select name="status" id="status">
-//             <option value="WAITING">WAITING</option>
-//             <option value="IMPLEMENTATION">IMPLEMENTATION</option>
-//             <option value="VERIFYING">VERIFYING</option>
-//             <option value="RELEASING">RELEASING</option>
-//           </select>
-//         </td>
-//       </tr>
-//     )
-//   }
-// }
-//
-
-// class Signup extends React.Component {
-//
-//   render() {
-//     return ()
-//   }
-// }
-
 function UserGreeting(props) {
-  return <h1>Welcome back!</h1>;
+  return <h5>Welcome back!</h5>;
 }
 
 function GuestGreeting(props) {
-  return <h1>Please sign up.</h1>;
+  return <h5>Please sign up</h5>;
 }
 
 function Greeting(props) {
@@ -318,7 +306,7 @@ class Header extends React.Component {
           <Nav className="ml-auto" navbar>
             <NavItem>
               <NavLink>
-                <Greeting isLoggedIn={false}/>,
+                <Greeting isLoggedIn={false}/>
               </NavLink>
             </NavItem>
           </Nav>
@@ -331,7 +319,9 @@ class Header extends React.Component {
 const App = () => (
   <div>
     <Header/>
-    <Main/>
+    <Container>
+      <Main/>
+    </Container>
   </div>
 );
 
@@ -341,7 +331,7 @@ const Main = () => (
       <Route exact path='/' component={Profile}/>
       {/*<Route path='/signup' component={Signup}/>*/}
       {/*<Route path='/logout' component={Logout}/>*/}
-      <Route path='/projects/:number/tasks/:number' component={Task}/>
+      <Route path='/tasks/:indexTask' component={TaskDetails}/>
     </Switch>
   </main>
 );
