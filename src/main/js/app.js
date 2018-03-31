@@ -27,6 +27,8 @@ const FilterableTable = require('react-filterable-table');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const client = require('./client');
+const follow = require('./follow');
+const stompClient = require('./websocket-listener');
 
 const root = '/api';
 

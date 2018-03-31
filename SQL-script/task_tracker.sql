@@ -53,8 +53,9 @@ CREATE TABLE tasks (
 
 CREATE TABLE comments (
   id        BIGINT AUTO_INCREMENT,
-  id_task   BIGINT       NOT NULL,
-  id_user   BIGINT       NOT NULL,
+  id_task   BIGINT,
+  id_user   BIGINT,
+#   version   BIGINT,
   text      VARCHAR(300) NOT NULL,
   post_time DATETIME     NOT NULL,
   PRIMARY KEY (id),
@@ -89,9 +90,11 @@ INSERT INTO managers (id_user) VALUES (10);
 INSERT INTO projects (id_manager, title, status) VALUES (7, 'Here Is A Quick Cure For Table', 'WAITING');
 INSERT INTO projects (id_manager, title, status) VALUES (7, 'Master (Your) Table in 5 Minutes A Day', 'WAITING');
 INSERT INTO projects (id_manager, title, status) VALUES (7, '11 Methods Of Table Domination', 'WAITING');
-INSERT INTO projects (id_manager, title, status)VALUES (8, 'Now You Can Buy An App That is Really Made For Table', 'WAITING');
+INSERT INTO projects (id_manager, title, status)
+VALUES (8, 'Now You Can Buy An App That is Really Made For Table', 'WAITING');
 INSERT INTO projects (id_manager, title, status) VALUES (8, 'Rules Not To Follow About Table', 'WAITING');
-INSERT INTO projects (id_manager, title, status)VALUES (9, 'Use Table To Make Someone Fall In Love With You', 'WAITING');
+INSERT INTO projects (id_manager, title, status)
+VALUES (9, 'Use Table To Make Someone Fall In Love With You', 'WAITING');
 INSERT INTO projects (id_manager, title, status) VALUES (10, 'Table Iphone Apps', 'WAITING');
 
 INSERT INTO project_developer (id_project, id_developer) VALUES (1, 1);

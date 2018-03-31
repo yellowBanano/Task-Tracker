@@ -4,16 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,4 +26,7 @@ public class Developer extends User {
             inverseJoinColumns = @JoinColumn(name = "id_project")
     )
     private Set<Project> projects = new HashSet<>();
+
+    @OneToMany(mappedBy = "developer")
+    private Set<Task> tasks = new HashSet<>();
 }
