@@ -2,13 +2,7 @@ package by.myself.task_tracker.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -41,9 +35,9 @@ public class Comment extends BaseEntity {
 
 //    TODO Solve this 409 conflict
 //    PUT For dependant objects
-//    @Version
-//    @JsonIgnore
-//    private Long version;
+    @Version
+    @JsonIgnore
+    private Long version;
 
     @Column(name = "post_time")
     @CreatedDate

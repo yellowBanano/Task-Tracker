@@ -1,216 +1,303 @@
 import React from "react";
-import FaClock from "react-icons/lib/fa/clock-o";
-import FaTrash from "react-icons/lib/fa/trash";
 
 const ReactDOM = require('react-dom');
 
+import FaClock from "react-icons/lib/fa/clock-o";
+import FaPencil from "react-icons/lib/fa/pencil";
+import FaTrash from "react-icons/lib/fa/trash";
+import FaPlus from 'react-icons/lib/fa/plus';
+import FaUpdate from 'react-icons/lib/fa/pencil-square';
+import moment from "moment";
+
 const client = require('../client');
 const follow = require('../follow');
+const when = require('when');
 
 const root = '/api';
 
 export default class TaskDetails extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {task: {}, currentUser: {}, comments: [], projectTitle: '', attributes: []};
-    this.onCreate = this.onCreate.bind(this);
-    this.onDelete = this.onDelete.bind(this);
-  }
+    constructor(props) {
+        super(props);
+        this.state = {task: {}, user: {}, comments: [], projectTitle: ''};
+        this.onCreate = this.onCreate.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+        this.onDelete = this.onDelete.bind(this);
+    }
 
 
-  loadFromServer() {
-    follow(client, root, [
-      {rel: 'comments'}]
-    ).then(commentsCollection => {
-      return client({
-        method: 'GET',
-        path: commentsCollection.entity._links.profile.href,
-        headers: {'Accept': 'application/schema+json'}
-      });
-    }).done(schema => {
-      this.schema = schema.entity;
-      this.setState({
-        attributes: Object.keys(this.schema.properties)
-      })
-    });
-  }
+    loadFromServer() {
+        let indexTask = this.props.match.params.indexTask;
+        follow(client, root, [
+            {rel: 'tasks'}]
+        ).then(tasksCollection => {
+            return client({
+                method: 'GET',
+                path: tasksCollection.entity._links.self.href + '/' + indexTask + '/comments',
+                headers: {'Accept': 'application/json'}
+            });
+        }).then(commentsCollection => {
+            return commentsCollection.entity._embedded.comments.map(comment =>
+                client({
+                    method: 'GET',
+                    path: comment._links.self.href
+                })
+            );
+        }).then(commentPromises => {
+            return when.all(commentPromises);
+        }).done(comments => {
+            this.setState({
+                comments: comments
+            });
+        });
+    }
 
-  onCreate(newComment) {
-    let currentUser = this.state.currentUser;
-    follow(client, root, ['comments']).then(commentsCollection => {
-      return client({
-        method: 'POST',
-        path: commentsCollection.entity._links.self.href,
-        entity: newComment,
-        headers: {'Content-Type': 'application/json'}
-      })
-    }).done(commentsCollection => {
-      client({
-        method: 'PUT',
-        path: commentsCollection.entity._links.task.href,
-        entity: this.state.task,
-        headers: {'Content-Type': 'text/uri-list'}
-      });
-      client({
-        method: 'PUT',
-        path: commentsCollection.entity._links.user.href,
-        entity: currentUser,
-        headers: {'Content-Type': 'text/uri-list'}
-      })
-    });
-    this.loadFromServer();
-  }
+    onCreate(newComment) {
+        let secondChanceForComment = {};
+        follow(client, root, ['comments']
+        ).then(commentsCollection => {
+            return client({
+                method: 'POST',
+                path: commentsCollection.entity._links.self.href,
+                entity: newComment,
+                headers: {'Content-Type': 'application/json'}
+            })
+        }).then(comment => {
+            secondChanceForComment = comment;
+            return client({
+                method: 'PUT',
+                path: comment.entity._links.task.href,
+                entity: this.state.task,
+                headers: {'Content-Type': 'text/uri-list'}
+            });
+        }).then(() => {
+            client({
+                method: 'PUT',
+                path: secondChanceForComment.entity._links.user.href,
+                entity: this.state.user,
+                headers: {'Content-Type': 'text/uri-list'}
+            });
+        }).done(response => {
+            this.loadFromServer();
+        });
+    }
 
-  onDelete(comment) {
-    client({method: 'DELETE', path: comment._links.self.href}).done(response => {
-      this.loadFromServer();
-    });
-  }
+    onUpdate(comment, updatedComment) {
+        client({
+            method: 'PUT',
+            path: comment.entity._links.self.href,
+            entity: updatedComment,
+            headers: {
+                'Content-Type': 'application/json',
+                'If-Match': comment.headers.Etag
+            }
+        }).done(response => {
+            this.loadFromServer();
+        }, response => {
+            if (response.status.code === 412) {
+                alert('DENIED: Unable to update ' +
+                    comment.entity._links.self.href + '. Your copy is stale.');
+            }
+        });
+    }
+
+    onDelete(comment) {
+        client({method: 'DELETE', path: comment.entity._links.self.href}).done(response => {
+            this.loadFromServer();
+        });
+    }
 
 
-  componentDidMount() {
-    let indexTask = this.props.match.params.indexTask;
-    const rootTask = '/api/tasks/';
-    client({method: 'GET', path: rootTask + indexTask}).done(response => {
-      this.setState({task: response.entity});
-    });
-    client({method: 'GET', path: rootTask + indexTask + "/project"}).done(response => {
-      this.setState({projectTitle: response.entity.title});
-    });
-    client({method: 'GET', path: rootTask + indexTask + "/comments"}).done(response => {
-      this.setState({comments: response.entity._embedded.comments});
-    });
+    componentDidMount() {
+        let indexTask = this.props.match.params.indexTask;
+        const rootTask = '/api/tasks/';
+        client({method: 'GET', path: rootTask + indexTask}).done(response => {
+            this.setState({task: response.entity});
+        });
+        client({method: 'GET', path: rootTask + indexTask + "/project"}).done(response => {
+            this.setState({projectTitle: response.entity.title});
+        });
 
-    // --------------------- TEST USER ------------------------------
-    client({method: 'GET', path: root + "/users/1"}).done(response => {
-      this.setState({currentUser: response.entity});
-    });
-    // --------------------------------------------------------------
+        // --------------------- TEST USER ------------------------------
+        client({method: 'GET', path: root + "/users/1"}).done(response => {
+            this.setState({user: response.entity});
+        });
+        // --------------------------------------------------------------
 
-    this.loadFromServer();
-  }
+        this.loadFromServer();
+    }
 
-  render() {
-    let task = this.state.taskSelfLink;
-    let currentUser = this.state.currentUser;
-    return (
-      <div>
-        <h1>{this.state.projectTitle}</h1>
-        <h3>Task</h3>
-        <i>{this.state.task.description}</i>
-        <h3 className="pull-left">Comments</h3>
+    render() {
+        return (
+            <div>
+                <h1>{this.state.projectTitle}</h1>
+                <h3>Task</h3>
+                <i>{this.state.task.description}</i>
+                <div className="message-wrap col-lg-8">
+                    <div className="alert alert-info msg-date">
+                        <strong>Comments</strong>
+                    </div>
 
-        <div className="message-wrap">
-          <CommentList comments={this.state.comments}/>
-          <CreateComment attributes={this.state.attributes}
-                         task={task}
-                         currentUser={currentUser}
-                         onCreate={this.onCreate}
-                         onDelete={this.onDelete}/>
-        </div>
-      </div>
-    )
-  }
+                    <CommentList comments={this.state.comments}
+                                 onDelete={this.onDelete}
+                                 onUpdate={this.onUpdate}/>
+                    <CreateComment onCreate={this.onCreate}/>
+                </div>
+            </div>
+        )
+    }
 }
 
 class CreateComment extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {value: ''};
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
+    constructor(props) {
+        super(props);
+        this.state = {value: ''};
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    let newComment = {};
-    let textAttribute = this.props.attributes[2];
-    newComment[textAttribute] = this.state.value;
-    this.setState({value: ''});
+    handleSubmit(e) {
+        e.preventDefault();
+        let newComment = {};
+        let textAttribute = 'text';
+        newComment[textAttribute] = this.state.value;
+        this.setState({value: ''});
 
-    this.props.onCreate(newComment);
-  }
+        this.props.onCreate(newComment);
+    }
 
-  render() {
-    let textAttribute = this.props.attributes[2]; // 0 - postTime, 1 - task, 2 - text, 3 - user
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <textarea value={this.state.value} onChange={this.handleChange} className="field"/>
-          <button type="submit">Save</button>
-        </form>
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div className="send-wrap ">
+                <form>
+        <textarea className="form-control send-message" rows="3" placeholder="Write a reply..."
+                  value={this.state.value} onChange={this.handleChange}/>
+                    <div className="btn-panel">
+                        <a className=" col-lg-4 text-right btn send-message-btn pull-right" onClick={this.handleSubmit} role="button">
+                            <FaPlus/> Send Comment</a>
+                    </div>
+                    {/*<button type="submit">Save</button>*/}
+                </form>
+            </div>
+        )
+    }
+}
 
+class UpdateComment extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {value: this.props.comment.entity.text};
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        let updatedComment = this.props.comment.entity;
+        let textAttribute = 'text';
+        updatedComment[textAttribute] = this.state.value;
+
+        this.props.onUpdate(this.props.comment, updatedComment);
+        window.location = "#";
+    }
+
+    render() {
+        let commentSelfLink = this.props.comment.entity._links.self.href;
+        var commentId = "updateEmployee-" + commentSelfLink;
+
+        return (
+            <div key={commentSelfLink}>
+
+                <a className="d-inline-block" href={"#" + commentId} onClick={this.handleSubmit}><FaPencil/></a>
+                <div id={commentId} className="modalDialog">
+                    <div>
+                        <a href="#" role="button" title="Close" className="close">X</a>
+
+                        <h2>Update a Comment</h2>
+
+                        <form>
+                            <textarea className="form-control vresize" value={this.state.value}
+                                      onChange={this.handleChange}/>
+                            <button className="pull-right" onClick={this.handleSubmit}><FaUpdate /> Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }
 
 class CommentList extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  render() {
-    let comments = this.props.comments.map(comment =>
-      <Comment key={comment._links.self.href}
-               attributes={this.props.attributes}
-               comment={comment}
-               onDelete={this.props.onDelete}
-      />
-    );
-    return (
-      <div className="msg-wrap">
-        {comments}
-      </div>
-    )
-  }
+    render() {
+        let comments = this.props.comments.map(comment =>
+            <Comment key={comment.entity._links.self.href}
+                     attributes={this.props.attributes}
+                     comment={comment}
+                     onDelete={this.props.onDelete}
+                     onUpdate={this.props.onUpdate}/>
+        );
+        return (
+            <div className="msg-wrap">
+                {comments}
+            </div>
+        )
+    }
 }
 
 class Comment extends React.Component {
-  constructor(props) {
-    super(props);
-    // this.handleDelete = this.handleDelete.bind(this);
-    this.state = {text: '', authorFullName: ''};
-  }
+    constructor(props) {
+        super(props);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.state = {text: '', authorFullName: ''};
+    }
 
-  componentDidMount() {
-    this.setState({text: this.props.comment.text})
-    client({method: 'GET', path: this.props.comment._links.self.href + '/user'}).done(response => {
-      this.setState({authorFullName: response.entity.firstName + " " + response.entity.lastName});
-    });
-  }
+    componentDidMount() {
+        this.setState({text: this.props.comment.entity.text});
+        client({method: 'GET', path: this.props.comment.entity._links.self.href + '/user'}).done(response => {
+            this.setState({authorFullName: response.entity.firstName + " " + response.entity.lastName});
+        });
+    }
 
-  handleDelete() {
-    this.props.onDelete(this.props.comment);
-  }
+    handleDelete() {
+        if (confirm("Are you sure about deleting?")) {
+            this.props.onDelete(this.props.comment);
+        }
+    }
 
-  render() {
-    return (
-      <div className="media msg ">
-        <a className="pull-left" href="#">
-          <img className="media-object" data-src="holder.js/64x64" alt="64x64" style={{width: 32, height: 32}}
-               src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"/>
-        </a>
-        <div className="media-body">
-          <button onClick={this.handleDelete}><span><FaTrash/></span></button>
-          {/*<UpdateDialog comment={this.props.comment}*/}
-          {/*attributes={this.props.attributes}*/}
-          {/*onUpdate={this.props.onUpdate}/>*/}
-          <FaClock/>
-          {this.props.comment.postTime}
-          <h5 className="media-heading">{this.state.authorFullName}</h5>
-          <small className="col-lg-10">
-            {this.state.text}
-          </small>
-        </div>
-      </div>
-    )
-  }
+    render() {
+        let datetime = moment(this.props.comment.entity.postTime).format("DD MMMM YYYY, kk:mm");
+        return (
+            <div className="media msg ">
+                <a className="pull-left" href="#">
+                    <img className="media-object" data-src="holder.js/64x64" alt="64x64"
+                         style={{width: 32, height: 32}}
+                         src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"/>
+                </a>
+                <div className="media-body">
+                    <UpdateComment comment={this.props.comment} onUpdate={this.props.onUpdate}/>
+                    <a className="d-inline-block" onClick={this.handleDelete}><span><FaTrash/></span></a>
+                    <small className="pull-right time"><FaClock/> {datetime}</small>
+                    <h5 className="media-heading">{this.state.authorFullName}</h5>
+                    <small className="col-lg-10">
+                        {this.state.text}
+                    </small>
+                </div>
+            </div>
+        )
+    }
 }

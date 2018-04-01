@@ -12,6 +12,14 @@ td, th {
     text-align: left;
 }
 
+textarea {
+    min-height:110px;
+}
+
+.vresize {
+    resize: vertical;
+}
+
 /*Classes for creating dialogs*/
 
 .modalDialog {

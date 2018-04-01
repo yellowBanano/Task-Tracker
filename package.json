@@ -6,6 +6,7 @@
   "dependencies": {
     "bootstrap": "^4.0.0",
     "jquery": "^1.12.4",
+    "moment": "^2.22.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-filterable-table": "^0.3.421",

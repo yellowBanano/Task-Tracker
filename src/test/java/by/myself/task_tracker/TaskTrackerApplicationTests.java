@@ -1,11 +1,6 @@
 package by.myself.task_tracker;
 
-import by.myself.task_tracker.repository.CommentRepository;
-import by.myself.task_tracker.repository.DeveloperRepository;
-import by.myself.task_tracker.repository.ManagerRepository;
-import by.myself.task_tracker.repository.ProjectRepository;
-import by.myself.task_tracker.repository.TaskRepository;
-import by.myself.task_tracker.repository.UserRepository;
+import by.myself.task_tracker.repository.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

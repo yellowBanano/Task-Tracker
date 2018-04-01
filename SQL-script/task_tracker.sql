@@ -55,7 +55,7 @@ CREATE TABLE comments (
   id        BIGINT AUTO_INCREMENT,
   id_task   BIGINT,
   id_user   BIGINT,
-#   version   BIGINT,
+  version   BIGINT,
   text      VARCHAR(300) NOT NULL,
   post_time DATETIME     NOT NULL,
   PRIMARY KEY (id),
