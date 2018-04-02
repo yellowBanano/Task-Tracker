@@ -181,7 +181,6 @@ class CreateComment extends React.Component {
                         <a className=" col-lg-4 text-right btn send-message-btn pull-right" onClick={this.handleSubmit} role="button">
                             <FaPlus/> Send Comment</a>
                     </div>
-                    {/*<button type="submit">Save</button>*/}
                 </form>
             </div>
         )
@@ -203,9 +202,11 @@ class UpdateComment extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        let updatedComment = this.props.comment.entity;
+        let updatedComment = {};
         let textAttribute = 'text';
+        let postTimeAttribute = 'postTime';
         updatedComment[textAttribute] = this.state.value;
+        updatedComment[postTimeAttribute] = this.props.comment.entity.postTime;
 
         this.props.onUpdate(this.props.comment, updatedComment);
         window.location = "#";
@@ -218,7 +219,7 @@ class UpdateComment extends React.Component {
         return (
             <div key={commentSelfLink}>
 
-                <a className="d-inline-block" href={"#" + commentId} onClick={this.handleSubmit}><FaPencil/></a>
+                <a href={"#" + commentId}><FaPencil/></a>
                 <div id={commentId} className="modalDialog">
                     <div>
                         <a href="#" role="button" title="Close" className="close">X</a>
@@ -263,11 +264,10 @@ class Comment extends React.Component {
     constructor(props) {
         super(props);
         this.handleDelete = this.handleDelete.bind(this);
-        this.state = {text: '', authorFullName: ''};
+        this.state = {authorFullName: ''};
     }
 
     componentDidMount() {
-        this.setState({text: this.props.comment.entity.text});
         client({method: 'GET', path: this.props.comment.entity._links.self.href + '/user'}).done(response => {
             this.setState({authorFullName: response.entity.firstName + " " + response.entity.lastName});
         });
@@ -290,11 +290,11 @@ class Comment extends React.Component {
                 </a>
                 <div className="media-body">
                     <UpdateComment comment={this.props.comment} onUpdate={this.props.onUpdate}/>
-                    <a className="d-inline-block" onClick={this.handleDelete}><span><FaTrash/></span></a>
+                    <a onClick={this.handleDelete}><span><FaTrash/></span></a>
                     <small className="pull-right time"><FaClock/> {datetime}</small>
                     <h5 className="media-heading">{this.state.authorFullName}</h5>
                     <small className="col-lg-10">
-                        {this.state.text}
+                        {this.props.comment.entity.text}
                     </small>
                 </div>
             </div>

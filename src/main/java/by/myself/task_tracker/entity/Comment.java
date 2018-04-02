@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString(callSuper = true, exclude = {"user"})
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"postTime"}, allowGetters = true)
 public class Comment extends BaseEntity {
 
     @ManyToOne
@@ -33,8 +32,6 @@ public class Comment extends BaseEntity {
     @NotBlank
     private String text;
 
-//    TODO Solve this 409 conflict
-//    PUT For dependant objects
     @Version
     @JsonIgnore
     private Long version;
