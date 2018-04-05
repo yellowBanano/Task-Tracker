@@ -16,7 +16,7 @@ import java.util.Set;
 public class Project extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "id_manager", nullable = false)
+    @JoinColumn(name = "id_manager")
     private Manager manager;
 
     @ManyToMany(mappedBy = "projects")
@@ -25,10 +25,10 @@ public class Project extends BaseEntity {
     @OneToMany(mappedBy = "project")
     private Set<Task> tasks = new HashSet<>();
 
-    @Column(name = "title", nullable = false, unique = true)
+    @Column(name = "title", unique = true)
     private String title;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
 }

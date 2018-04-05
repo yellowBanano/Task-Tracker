@@ -14,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-//@AllArgsConstructor
 @ToString(callSuper = true, exclude = {"projects"})
 @PrimaryKeyJoinColumn(name = "id_user")
 public class Developer extends User {

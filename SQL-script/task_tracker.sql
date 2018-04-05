@@ -12,29 +12,29 @@ CREATE TABLE users (
 );
 
 CREATE TABLE developers (
-  id_user BIGINT NOT NULL UNIQUE,
+  id_user BIGINT UNIQUE,
   PRIMARY KEY (id_user),
   FOREIGN KEY (id_user) REFERENCES users (id)
 );
 
 CREATE TABLE managers (
-  id_user BIGINT NOT NULL UNIQUE,
+  id_user BIGINT UNIQUE,
   PRIMARY KEY (id_user),
   FOREIGN KEY (id_user) REFERENCES users (id)
 );
 
 CREATE TABLE projects (
   id         BIGINT AUTO_INCREMENT,
-  id_manager BIGINT       NOT NULL,
-  title      VARCHAR(100) NOT NULL UNIQUE,
-  status     VARCHAR(30)  NOT NULL,
+  id_manager BIGINT,
+  title      VARCHAR(100) UNIQUE,
+  status     VARCHAR(30),
   PRIMARY KEY (id),
   FOREIGN KEY (id_manager) REFERENCES managers (id_user)
 );
 
 CREATE TABLE project_developer (
-  id_project   BIGINT NOT NULL,
-  id_developer BIGINT NOT NULL,
+  id_project   BIGINT,
+  id_developer BIGINT,
   PRIMARY KEY (id_project, id_developer),
   FOREIGN KEY (id_project) REFERENCES projects (id),
   FOREIGN KEY (id_developer) REFERENCES developers (id_user)
@@ -42,10 +42,10 @@ CREATE TABLE project_developer (
 
 CREATE TABLE tasks (
   id           BIGINT AUTO_INCREMENT,
-  id_project   BIGINT       NOT NULL,
+  id_project   BIGINT,
   id_developer BIGINT,
-  description  VARCHAR(100) NOT NULL,
-  status       VARCHAR(30)  NOT NULL,
+  description  VARCHAR(100),
+  status       VARCHAR(30),
   PRIMARY KEY (id),
   FOREIGN KEY (id_project) REFERENCES projects (id),
   FOREIGN KEY (id_developer) REFERENCES developers (id_user)
@@ -113,21 +113,21 @@ VALUES (3, 3, 'Is Description Worth [$] To You?', 'WAITING');
 INSERT INTO tasks (id_project, id_developer, description, status)
 VALUES (4, 4, 'Believe In Your Description Skills But Never Stop Improving', 'WAITING');
 
-INSERT INTO comments (id_task, id_user, text, post_time) VALUES (1, 1, 'Fast-Track Your Text', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (1, 2, 'Text Strategies For Beginners', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time) VALUES (1, 3, 'Cracking The Text Code', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (1, 4, 'Congratulations! Your Text Is (Are) About To Stop Being Relevant', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (2, 1, 'The Next 3 Things To Immediately Do About Text', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (2, 5, 'Are You Embarrassed By Your Text Skills? Here''s What To Do', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (2, 6, '9 Ridiculous Rules About Text', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (3, 7, 'How To Make Your Text Look Amazing In 5 Days', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (3, 8, 'Succeed With Text In 24 Hours', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, text, post_time)
-VALUES (4, 8, 'Here Is What You Should Do For Your Text', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time) VALUES (1, 1, 0, 'Fast-Track Your Text', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (1, 2, 0, 'Text Strategies For Beginners', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time) VALUES (1, 3, 0, 'Cracking The Text Code', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (1, 4, 0, 'Congratulations! Your Text Is (Are) About To Stop Being Relevant', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (2, 1, 0, 'The Next 3 Things To Immediately Do About Text', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (2, 5, 0, 'Are You Embarrassed By Your Text Skills? Here''s What To Do', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (2, 6, 0, '9 Ridiculous Rules About Text', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (3, 7, 0, 'How To Make Your Text Look Amazing In 5 Days', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (3, 8, 0, 'Succeed With Text In 24 Hours', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (4, 8, 0, 'Here Is What You Should Do For Your Text', '2018-03-23 19:50:58');

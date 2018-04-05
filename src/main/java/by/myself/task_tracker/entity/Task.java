@@ -18,7 +18,7 @@ import java.util.List;
 public class Task extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "id_project", nullable = false)
+    @JoinColumn(name = "id_project")
     private Project project;
 
     @ManyToOne
@@ -26,10 +26,10 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "id_developer")
     private Developer developer;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
 
