@@ -27,8 +27,4 @@ public class Project extends BaseEntity {
 
     @Column(name = "title", unique = true)
     private String title;
-
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private Status status;
 }

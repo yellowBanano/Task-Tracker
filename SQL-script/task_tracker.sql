@@ -8,6 +8,8 @@ CREATE TABLE users (
   password   VARCHAR(100) NOT NULL,
   first_name VARCHAR(50)  NOT NULL,
   last_name  VARCHAR(50)  NOT NULL,
+  enabled    BIT          NOT NULL,
+  role       VARCHAR(20)  NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -23,11 +25,19 @@ CREATE TABLE managers (
   FOREIGN KEY (id_user) REFERENCES users (id)
 );
 
+CREATE TABLE verification_tokens (
+  id          BIGINT AUTO_INCREMENT,
+  id_user     BIGINT       NOT NULL UNIQUE,
+  token       VARCHAR(200) NOT NULL,
+  expire_date DATE,
+  PRIMARY KEY (id),
+  FOREIGN KEY (id_user) REFERENCES users (id)
+);
+
 CREATE TABLE projects (
   id         BIGINT AUTO_INCREMENT,
   id_manager BIGINT,
   title      VARCHAR(100) UNIQUE,
-  status     VARCHAR(30),
   PRIMARY KEY (id),
   FOREIGN KEY (id_manager) REFERENCES managers (id_user)
 );
@@ -64,16 +74,26 @@ CREATE TABLE comments (
 );
 
 
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email1@hot.co', 'password', 'Marianne', 'Hanson');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email2@hot.co', 'password', 'Adam', 'Perkins');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email3@hot.co', 'password', 'Jeffrey', 'Stevens');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email4@hot.co', 'password', 'Julio', 'Chapman');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email5@hot.co', 'password', 'Evelyn', 'Griffith');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email6@hot.co', 'password', 'Hope', 'Adams');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email7@hot.co', 'password', 'Cecelia', 'Hill');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email8@hot.co', 'password', 'Santos', 'Neal');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email9@hot.co', 'password', 'Maggie', 'Estrada');
-INSERT INTO users (email, password, first_name, last_name) VALUES ('email10@hot.co', 'password', 'Nancy', 'Armstrong');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email1@hot.co', 'password', 'Marianne', 'Hanson', FALSE, 'DEVELOPER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email2@hot.co', 'password', 'Adam', 'Perkins', FALSE, 'DEVELOPER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email3@hot.co', 'password', 'Jeffrey', 'Stevens', FALSE, 'DEVELOPER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email4@hot.co', 'password', 'Julio', 'Chapman', FALSE, 'DEVELOPER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email5@hot.co', 'password', 'Evelyn', 'Griffith', FALSE, 'DEVELOPER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email6@hot.co', 'password', 'Hope', 'Adams', FALSE, 'DEVELOPER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email7@hot.co', 'password', 'Cecelia', 'Hill', FALSE, 'MANAGER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email8@hot.co', 'password', 'Santos', 'Neal', FALSE, 'MANAGER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email9@hot.co', 'password', 'Maggie', 'Estrada', FALSE, 'MANAGER');
+INSERT INTO users (email, password, first_name, last_name, enabled, role)
+VALUES ('email10@hot.co', 'password', 'Nancy', 'Armstrong', FALSE, 'MANAGER');
 
 INSERT INTO developers (id_user) VALUES (1);
 INSERT INTO developers (id_user) VALUES (2);
@@ -87,15 +107,15 @@ INSERT INTO managers (id_user) VALUES (8);
 INSERT INTO managers (id_user) VALUES (9);
 INSERT INTO managers (id_user) VALUES (10);
 
-INSERT INTO projects (id_manager, title, status) VALUES (7, 'Here Is A Quick Cure For Table', 'WAITING');
-INSERT INTO projects (id_manager, title, status) VALUES (7, 'Master (Your) Table in 5 Minutes A Day', 'WAITING');
-INSERT INTO projects (id_manager, title, status) VALUES (7, '11 Methods Of Table Domination', 'WAITING');
-INSERT INTO projects (id_manager, title, status)
-VALUES (8, 'Now You Can Buy An App That is Really Made For Table', 'WAITING');
-INSERT INTO projects (id_manager, title, status) VALUES (8, 'Rules Not To Follow About Table', 'WAITING');
-INSERT INTO projects (id_manager, title, status)
-VALUES (9, 'Use Table To Make Someone Fall In Love With You', 'WAITING');
-INSERT INTO projects (id_manager, title, status) VALUES (10, 'Table Iphone Apps', 'WAITING');
+INSERT INTO projects (id_manager, title) VALUES (7, 'Here Is A Quick Cure For Table');
+INSERT INTO projects (id_manager, title) VALUES (7, 'Master (Your) Table in 5 Minutes A Day');
+INSERT INTO projects (id_manager, title) VALUES (7, '11 Methods Of Table Domination');
+INSERT INTO projects (id_manager, title)
+VALUES (8, 'Now You Can Buy An App That is Really Made For Table');
+INSERT INTO projects (id_manager, title) VALUES (8, 'Rules Not To Follow About Table');
+INSERT INTO projects (id_manager, title)
+VALUES (9, 'Use Table To Make Someone Fall In Love With You');
+INSERT INTO projects (id_manager, title) VALUES (10, 'Table Iphone Apps');
 
 INSERT INTO project_developer (id_project, id_developer) VALUES (1, 1);
 INSERT INTO project_developer (id_project, id_developer) VALUES (2, 2);
@@ -113,10 +133,12 @@ VALUES (3, 3, 'Is Description Worth [$] To You?', 'WAITING');
 INSERT INTO tasks (id_project, id_developer, description, status)
 VALUES (4, 4, 'Believe In Your Description Skills But Never Stop Improving', 'WAITING');
 
-INSERT INTO comments (id_task, id_user, version, text, post_time) VALUES (1, 1, 0, 'Fast-Track Your Text', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (1, 1, 0, 'Fast-Track Your Text', '2018-03-23 19:50:58');
 INSERT INTO comments (id_task, id_user, version, text, post_time)
 VALUES (1, 2, 0, 'Text Strategies For Beginners', '2018-03-23 19:50:58');
-INSERT INTO comments (id_task, id_user, version, text, post_time) VALUES (1, 3, 0, 'Cracking The Text Code', '2018-03-23 19:50:58');
+INSERT INTO comments (id_task, id_user, version, text, post_time)
+VALUES (1, 3, 0, 'Cracking The Text Code', '2018-03-23 19:50:58');
 INSERT INTO comments (id_task, id_user, version, text, post_time)
 VALUES (1, 4, 0, 'Congratulations! Your Text Is (Are) About To Stop Being Relevant', '2018-03-23 19:50:58');
 INSERT INTO comments (id_task, id_user, version, text, post_time)

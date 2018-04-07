@@ -130,9 +130,15 @@ export default class TaskDetails extends React.Component {
   render() {
     return (
       <div>
-        <h1>{this.state.projectTitle}</h1>
-        <h3>Task</h3>
-        <i>{this.state.task.description}</i>
+        <div className="jumbotron">
+          <div className="page-header">
+            <h1>{this.state.projectTitle}</h1>
+          </div>
+          <h3>Task</h3>
+          <i>{this.state.task.description}</i>
+        </div>
+
+        <br/>
         <div className="message-wrap col-lg-8">
           <div className="alert alert-info msg-date">
             <strong>Comments</strong>
@@ -143,6 +149,7 @@ export default class TaskDetails extends React.Component {
                        onUpdate={this.onUpdate}/>
           <CreateComment onCreate={this.onCreate}/>
         </div>
+        <br/>
       </div>
     )
   }
@@ -175,8 +182,8 @@ class CreateComment extends React.Component {
     return (
       <div className="send-wrap ">
         <form>
-        <textarea className="form-control send-message" rows="3" placeholder="Write a reply..."
-                  value={this.state.value} onChange={this.handleChange}/>
+    <textarea className="form-control send-message" rows="3" placeholder="Write a reply..."
+              value={this.state.value} onChange={this.handleChange}/>
           <div className="btn-panel">
             <a className=" col-lg-4 text-right btn send-message-btn pull-right" onClick={this.handleSubmit}
                role="button">
@@ -228,8 +235,8 @@ class UpdateComment extends React.Component {
             <h2>Update a Comment</h2>
 
             <form>
-              <textarea className="form-control vresize" value={this.state.value}
-                        onChange={this.handleChange}/>
+    <textarea className="form-control vresize" value={this.state.value}
+              onChange={this.handleChange}/>
               <button className="pull-right" onClick={this.handleSubmit}><FaUpdate /> Update</button>
             </form>
           </div>

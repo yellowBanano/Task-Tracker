@@ -14,7 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(callSuper = true, exclude = {"projects"})
+@ToString(callSuper = true, exclude = {"projects", "tasks"})
 @PrimaryKeyJoinColumn(name = "id_user")
 public class Developer extends User {
 
@@ -28,4 +28,8 @@ public class Developer extends User {
 
     @OneToMany(mappedBy = "developer")
     private Set<Task> tasks = new HashSet<>();
+
+    public Developer(User user) {
+        super(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getRole(), user.isEnabled());
+    }
 }

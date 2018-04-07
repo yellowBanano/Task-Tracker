@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString(callSuper = true, exclude = {"myProjects"})
 @PrimaryKeyJoinColumn(name = "id_user")
 public class Manager extends User {
@@ -21,4 +20,11 @@ public class Manager extends User {
     @OneToMany(mappedBy = "manager")
     private List<Project> myProjects;
 
+    public Manager(String email, String password, String firstName, String lastName, Role role, boolean enabled) {
+        super(email, password, firstName, lastName, role, enabled);
+    }
+
+    public Manager(User user) {
+        super(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getRole(), user.isEnabled());
+    }
 }

@@ -23,6 +23,7 @@ import {
 import FaPencil from 'react-icons/lib/fa/pencil'
 import FaPlus from 'react-icons/lib/fa/plus'
 import TaskDetails from "./modules/TaskDetails";
+import moment from "moment";
 
 const FilterableTable = require('react-filterable-table');
 const React = require('react');
@@ -37,19 +38,39 @@ class Profile extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {projects: [], currentUser: {}, isManager: false}
+    this.onCreate = this.onCreate.bind(this);
+    this.handleManagerChooseButtonClick = this.handleManagerChooseButtonClick.bind(this);
+    this.state = {projects: [], currentUser: {}, isManager: false, managerLoad: false}
   };
 
   componentDidMount() {
-    // --------------------- TEST USER ------------------------------
-    client({method: 'GET', path: root + "/users/7"}).done(response => {
-      this.setState({
-        currentUser: response.entity,
-        isManager: response.entity._links.self.href.includes('managers')
-      });
-    });
-    // --------------------------------------------------------------
+    this.loadUserFromServer();
     this.loadProjectsFromServer();
+  }
+
+  loadUserFromServer() {
+    if (this.state.managerLoad === true) {
+      client({method: 'GET', path: root + "/users/7"}).done(response => {
+        this.setState({
+          currentUser: response.entity,
+          isManager: response.entity._links.self.href.includes('managers')
+        });
+      });
+    } else {
+      client({method: 'GET', path: root + "/users/1"}).done(response => {
+        this.setState({
+          currentUser: response.entity,
+          isManager: response.entity._links.self.href.includes('managers')
+        });
+      });
+    }
+  }
+
+  handleManagerChooseButtonClick() {
+    this.setState({managerLoad: !this.state.managerLoad});
+    // this.loadUserFromServer();
+    // this.loadProjectsFromServer();
+    this.componentDidMount();
   }
 
   // --------------------- LOAD ALL PROJECTS (ONLY FOR TESTS) ------------------------------
@@ -124,7 +145,8 @@ class Profile extends React.Component {
         headers: {'Content-Type': 'text/uri-list'}
       });
     });
-    this.loadProjectsFromServer();
+    this.componentDidMount();
+    // this.loadProjectsFromServer();
   }
 
   render() {
@@ -132,7 +154,11 @@ class Profile extends React.Component {
 
     return (
       <div>
-        <ProjectList currentUser={this.state.currentUser} projects={this.state.projects}
+        <Button color="danger" size="lg" block onClick={this.handleManagerChooseButtonClick}>Toggle MANAGER</Button>
+
+        <ProjectList currentUser={this.state.currentUser}
+                     projects={this.state.projects}
+                     onCreate={this.onCreate}
                      isManager={this.state.isManager}/>
         {developerFilterList}
       </div>
@@ -332,23 +358,26 @@ class TaskList extends React.Component {
   }
 
   onCreate(newTask) {
-    follow(client, root, ['tasks']
-    ).then(tasksCollection => {
-      return client({
-        method: 'POST',
-        path: tasksCollection.entity._links.self.href,
-        entity: newTask,
-        headers: {'Content-Type': 'application/json'}
+    if (newTask.description.trim() !== '') {
+      follow(client, root, ['tasks']
+      ).then(tasksCollection => {
+        return client({
+          method: 'POST',
+          path: tasksCollection.entity._links.self.href,
+          entity: newTask,
+          headers: {'Content-Type': 'application/json'}
+        });
+      }).done(task => {
+        return client({
+          method: 'PUT',
+          path: task.entity._links.project.href,
+          entity: this.props.project,
+          headers: {'Content-Type': 'text/uri-list'}
+        });
       });
-    }).done(task => {
-      return client({
-        method: 'PUT',
-        path: task.entity._links.project.href,
-        entity: this.props.project,
-        headers: {'Content-Type': 'text/uri-list'}
-      });
-    });
-    this.loadTasksFromServer();
+      this.componentDidMount();
+      // this.loadTasksFromServer();
+    }
   }
 
   onUpdate(task, updatedTask) {
@@ -364,7 +393,8 @@ class TaskList extends React.Component {
       entity: updatedTask.developer,
       headers: {'Content-Type': 'text/uri-list'}
     });
-    this.loadTasksFromServer();
+    this.componentDidMount();
+    // this.loadTasksFromServer();
   }
 
   render() {
@@ -753,7 +783,21 @@ class DeveloperFilterList extends React.Component {
 }
 
 function UserGreeting(props) {
-  return <h5>Welcome back!</h5>;
+  let username = 'Visitor';
+  let nowHour = moment().hour();
+  let greetingPhrase = '';
+  if (6 <= nowHour && nowHour <= 11) {
+    greetingPhrase = 'Good morning, ' + username;
+  } else if (12 <= nowHour && nowHour <= 17) {
+    greetingPhrase = 'Good afternoon, ' + username;
+  } else if (18 <= nowHour && nowHour <= 20) {
+    greetingPhrase = 'Good evening, ' + username;
+  } else if (21 <= nowHour && nowHour <= 23) {
+    greetingPhrase = 'Good night, ' + username;
+  } else {
+    greetingPhrase = 'Hard task, ' + username + '? Don`t overwhelm yourself.'
+  }
+  return <h5>{greetingPhrase}</h5>;
 }
 
 function GuestGreeting(props) {
@@ -793,7 +837,12 @@ class Header extends React.Component {
           <Nav className="ml-auto" navbar>
             <NavItem>
               <NavLink>
-                <Greeting isLoggedIn={false}/>
+                <Greeting isLoggedIn={true}/>
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink>
+                <Button color="danger" outline href="/logout">Log out</Button>
               </NavLink>
             </NavItem>
           </Nav>
@@ -816,7 +865,8 @@ const Main = () => (
   <main>
     <Switch>
       <Route exact path='/' component={Profile}/>
-      {/*<Route path='/signup' component={Signup}/>*/}
+      {/*<Route path='/registration' component={Registration}/>*/}
+      {/*<Route path='/login' component={Login}/>*/}
       {/*<Route path='/logout' component={Logout}/>*/}
       <Route path='/tasks/:indexTask' component={TaskDetails}/>
     </Switch>

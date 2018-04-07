@@ -10,5 +10,4 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "developers", path = "developers")
 public interface DeveloperRepository extends CrudRepository<Developer, Long> {
 
-    Developer findFirstById(Long id);
 }
