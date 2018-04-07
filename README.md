@@ -1,5 +1,13 @@
 # Task-Tracker
 
+Technologies:
+* Java 8
+* Spring
+* Hibernate
+* MySQL
+* React.js
+* Thymeleaf
+
 To start application:
 1. Install Node.js
 2. In node console cd to application folder
